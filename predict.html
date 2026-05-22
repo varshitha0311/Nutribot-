@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predict - FoodAI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        .upload-zone { border: 3px dashed #a855f7; transition: all 0.3s; }
+        .upload-zone:hover { background: rgba(168, 85, 247, 0.1); border-color: #c026d3; }
+        .preview { max-height: 420px; }
+        .glass { background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(10px); }
+        .nav-link { transition: color 0.3s; }
+        .nav-link:hover { color: #c084fc; }
+    </style>
+</head>
+<body class="bg-zinc-950 text-white">
+    <!-- NAVBAR - UPDATED WITH ALL LINKS -->
+    <nav class="fixed top-0 w-full z-50 glass border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl flex items-center justify-center text-2xl">🍕</div>
+                <h1 class="text-3xl font-bold tracking-tighter">FoodAI</h1>
+            </div>
+            <div class="flex gap-8 text-lg font-medium">
+                <a href="/" class="nav-link text-white hover:text-purple-400 transition">Home</a>
+                <a href="/about" class="nav-link text-white hover:text-purple-400 transition">About</a>
+                <a href="/algo" class="nav-link text-white hover:text-purple-400 transition">Algorithms</a>
+                <a href="/predict" class="nav-link text-purple-400 border-b-2 border-purple-400">Predict</a>
+                <a href="/logout" class="nav-link text-red-400 hover:text-red-300 transition">
+                    <i class="fas fa-sign-out-alt mr-1"></i> Logout ({{ session['user'] }})
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-4xl mx-auto px-6 py-32">
+        <div class="text-center mb-12">
+            <h1 class="text-6xl font-bold">Upload Food Image</h1>
+            <p class="text-2xl text-zinc-400 mt-3">Our AI will tell you exactly what it is + nutrition info</p>
+        </div>
+
+        <!-- Upload Form -->
+        <form id="predictForm" action="/predict" method="POST" enctype="multipart/form-data" class="glass rounded-3xl p-12">
+            <div id="dropZone" class="upload-zone border-4 border-dashed border-purple-500 rounded-3xl h-96 flex flex-col items-center justify-center cursor-pointer">
+                <i class="fas fa-cloud-upload-alt text-7xl text-purple-400 mb-6"></i>
+                <p class="text-2xl font-medium">Drag & drop your food photo here</p>
+                <p class="text-zinc-400 mt-2">or</p>
+                <label class="mt-6 px-8 py-4 bg-purple-600 rounded-3xl cursor-pointer hover:bg-purple-700 transition">Choose Image</label>
+                <input type="file" id="imageInput" name="image" accept="image/*" class="hidden" required>
+            </div>
+            
+            <div id="previewContainer" class="hidden mt-8 text-center">
+                <img id="preview" class="preview mx-auto rounded-3xl shadow-2xl" alt="Preview">
+                <button type="submit" class="mt-8 px-16 py-5 bg-gradient-to-r from-purple-600 to-pink-600 text-2xl font-bold rounded-3xl hover:scale-105 transition">Analyze Image →</button>
+            </div>
+        </form>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="mt-4 p-4 rounded-lg {% if category == 'danger' %}bg-red-500/20 border border-red-500 text-red-200{% else %}bg-green-500/20 border border-green-500 text-green-200{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Image Guidelines -->
+        <div class="mt-16 grid grid-cols-2 gap-8">
+            <div class="glass p-8 rounded-3xl">
+                <h3 class="text-2xl font-semibold mb-4"><i class="fas fa-lightbulb text-yellow-400 mr-2"></i> Tips for Best Results</h3>
+                <ul class="space-y-3 text-zinc-300">
+                    <li>✔️ Ensure the food is the main focus of the image</li>
+                    <li>✔️ Good lighting helps the AI recognize details</li>
+                    <li>✔️ Avoid heavy filters or overlays</li>
+                    <li>✔️ Single dish per photo works best</li>
+                </ul>
+            </div>
+            <div class="glass p-8 rounded-3xl">
+                <h3 class="text-2xl font-semibold mb-4"><i class="fas fa-utensils text-purple-400 mr-2"></i> Supported Foods</h3>
+                <div class="grid grid-cols-2 gap-2 text-sm">
+                    <span>🍎 Apple Pie</span>
+                    <span>🥟 Cannoli</span>
+                    <span>🧀 Cheese Plate</span>
+                    <span>🍰 Cheesecake</span>
+                    <span>🍗 Chicken Wings</span>
+                    <span>🍫 Chocolate Cake</span>
+                    <span>🥚 Deviled Eggs</span>
+                    <span>🍩 Donuts</span>
+                    <span>🍟 French Fries</span>
+                    <span>🍦 Frozen Yogurt</span>
+                    <span>🍦 Ice Cream</span>
+                    <span>🍪 Macarons</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const dropZone = document.getElementById('dropZone');
+        const imageInput = document.getElementById('imageInput');
+        const previewContainer = document.getElementById('previewContainer');
+        const previewImg = document.getElementById('preview');
+
+        dropZone.addEventListener('click', () => imageInput.click());
+        
+        imageInput.addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    previewImg.src = ev.target.result;
+                    previewContainer.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.style.background = 'rgba(168,85,247,0.2)'; });
+        dropZone.addEventListener('dragleave', () => dropZone.style.background = '');
+        dropZone.addEventListener('drop', e => {
+            e.preventDefault();
+            dropZone.style.background = '';
+            if (e.dataTransfer.files.length > 0) {
+                imageInput.files = e.dataTransfer.files;
+                const file = e.dataTransfer.files[0];
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    previewImg.src = ev.target.result;
+                    previewContainer.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+
+    <!-- FOOTER -->
+    <footer class="bg-black py-12 border-t border-white/10">
+        <div class="max-w-7xl mx-auto px-6 text-center text-zinc-500">
+            <p>© 2026 FoodAI • Built with ❤️ for healthier choices</p>
+        </div>
+    </footer>
+</body>
+</html>

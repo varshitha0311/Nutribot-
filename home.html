@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodAI - Smart Food Classifier</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+        body { font-family: 'Poppins', sans-serif; }
+        .hero-bg { background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1603133872878-684f208fb84b?q=80&w=2070'); background-size: cover; background-position: center; }
+        .glass { background: rgba(255,255,255,0.1); backdrop-filter: blur(16px); }
+        .nav-link { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .nav-link:hover { transform: translateY(-2px); color: #a855f7; }
+        .card-hover { transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .card-hover:hover { transform: scale(1.03); box-shadow: 0 25px 50px -12px rgba(168,85,247,0.4); }
+        .food-grid img { transition: transform 0.3s; }
+        .food-grid img:hover { transform: scale(1.1); }
+    </style>
+</head>
+<body class="bg-zinc-950 text-white">
+    <!-- NAVBAR -->
+    <nav class="fixed top-0 w-full z-50 glass border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl flex items-center justify-center text-2xl">🍕</div>
+                <h1 class="text-3xl font-bold tracking-tighter">FoodAI</h1>
+            </div>
+            <div class="flex gap-8 text-lg font-medium">
+                <a href="/" class="nav-link text-purple-400">Home</a>
+                <a href="/about" class="nav-link">About</a>
+                <a href="/algo" class="nav-link">Algorithms</a>
+                {% if logged_in %}
+                    <a href="/predict" class="nav-link">Predict</a>
+                    <a href="/logout" class="nav-link">Logout ({{ username }})</a>
+                {% else %}
+                    <a href="/login" class="nav-link">Login</a>
+                    <a href="/register" class="nav-link">Register</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="hero-bg h-screen flex items-center justify-center text-center">
+        <div class="max-w-4xl px-6 animate-fade-in">
+            <h1 class="text-7xl font-bold mb-6 leading-none tracking-tighter bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text">Know Your Food.<br>Stay Healthy.</h1>
+            <p class="text-2xl text-zinc-300 mb-10">Upload any food image • AI detects instantly • Get nutrition + diabetic tips</p>
+            <div class="flex gap-6 justify-center">
+                {% if logged_in %}
+                <a href="/predict" class="px-10 py-5 bg-white text-black font-semibold text-xl rounded-3xl flex items-center gap-3 hover:bg-purple-600 hover:text-white transition-all shadow-2xl">
+                    <i class="fas fa-camera"></i> Start Predicting
+                </a>
+                {% else %}
+                <a href="/register" class="px-10 py-5 bg-white text-black font-semibold text-xl rounded-3xl flex items-center gap-3 hover:bg-purple-600 hover:text-white transition-all shadow-2xl">
+                    <i class="fas fa-user-plus"></i> Get Started
+                </a>
+                {% endif %}
+                <a href="/about" class="px-10 py-5 border-2 border-white font-semibold text-xl rounded-3xl hover:bg-white/10 transition-all">Learn More</a>
+            </div>
+            <div class="mt-16 text-sm text-zinc-400 flex justify-center gap-8">
+                <div>✅ 12 Food Classes</div>
+                <div>✅ VGG16 • 84.67% Accuracy</div>
+                <div>✅ Real-time Results</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- STATS SECTION -->
+    <section class="py-20 bg-gradient-to-b from-zinc-900 to-zinc-950">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-4 gap-8 text-center">
+                <div class="glass p-8 rounded-3xl">
+                    <div class="text-5xl font-bold text-purple-400">12</div>
+                    <div class="text-zinc-400 mt-2">Food Classes</div>
+                </div>
+                <div class="glass p-8 rounded-3xl">
+                    <div class="text-5xl font-bold text-pink-400">84.67%</div>
+                    <div class="text-zinc-400 mt-2">Accuracy (VGG16)</div>
+                </div>
+                <div class="glass p-8 rounded-3xl">
+                    <div class="text-5xl font-bold text-cyan-400">< 1s</div>
+                    <div class="text-zinc-400 mt-2">Prediction Time</div>
+                </div>
+                <div class="glass p-8 rounded-3xl">
+                    <div class="text-5xl font-bold text-green-400">10k+</div>
+                    <div class="text-zinc-400 mt-2">Images Trained</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SUPPORTED FOODS GRID -->
+    
+
+    <!-- HOW IT WORKS -->
+    <section class="py-24 bg-zinc-900">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="text-5xl font-bold text-center mb-16">How It Works</h2>
+            <div class="grid grid-cols-3 gap-8">
+                <div class="glass p-10 rounded-3xl text-center">
+                    <div class="w-20 h-20 bg-purple-600 rounded-3xl flex items-center justify-center text-4xl mx-auto mb-6">📤</div>
+                    <h3 class="text-2xl font-semibold mb-3">1. Upload</h3>
+                    <p class="text-zinc-400">Drag & drop a photo of your meal – our AI supports 12 food categories.</p>
+                </div>
+                <div class="glass p-10 rounded-3xl text-center">
+                    <div class="w-20 h-20 bg-pink-600 rounded-3xl flex items-center justify-center text-4xl mx-auto mb-6">🤖</div>
+                    <h3 class="text-2xl font-semibold mb-3">2. Analyze</h3>
+                    <p class="text-zinc-400">VGG16 model classifies the food with 84.67% accuracy in under a second.</p>
+                </div>
+                <div class="glass p-10 rounded-3xl text-center">
+                    <div class="w-20 h-20 bg-cyan-600 rounded-3xl flex items-center justify-center text-4xl mx-auto mb-6">📊</div>
+                    <h3 class="text-2xl font-semibold mb-3">3. Learn</h3>
+                    <p class="text-zinc-400">Get calories, macros, and diabetic-friendly tips instantly.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DIABETES FACTS -->
+    <section class="py-24">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-5xl font-bold mb-6">Why FoodAI for Diabetes?</h2>
+                    <p class="text-lg text-zinc-300 leading-relaxed">Over 422 million people worldwide have diabetes. Managing blood sugar starts with knowing what's on your plate. FoodAI gives you:</p>
+                    <ul class="mt-6 space-y-4 text-zinc-300">
+                        <li class="flex gap-3"><i class="fas fa-check-circle text-green-400 text-xl"></i> Instant carbohydrate estimates</li>
+                        <li class="flex gap-3"><i class="fas fa-check-circle text-green-400 text-xl"></i> Diabetic-friendly alternatives</li>
+                        <li class="flex gap-3"><i class="fas fa-check-circle text-green-400 text-xl"></i> Portion guidance based on AI</li>
+                        <li class="flex gap-3"><i class="fas fa-check-circle text-green-400 text-xl"></i> Education on glycemic impact</li>
+                    </ul>
+                </div>
+                <div class="glass p-8 rounded-3xl">
+                    <h3 class="text-2xl font-semibold mb-4">Did You Know?</h3>
+                    <div class="space-y-4">
+                        <p>🥧 A slice of apple pie has ~37g carbs – equivalent to 2.5 slices of bread.</p>
+                        <p>🍟 French fries have a high glycemic index; pairing with protein helps.</p>
+                        <p>🧀 Cheese is low-carb but high in saturated fat – moderation is key.</p>
+                        <p>🍦 Ice cream can be enjoyed if you account for carbs and choose sugar-free options.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CALL TO ACTION -->
+    <section class="py-24 bg-gradient-to-r from-purple-900 to-pink-900">
+        <div class="max-w-4xl mx-auto text-center px-6">
+            <h2 class="text-5xl font-bold mb-6">Ready to make healthier choices?</h2>
+            <p class="text-xl text-zinc-200 mb-10">Join thousands using FoodAI to understand their food better.</p>
+            {% if logged_in %}
+            <a href="/predict" class="px-12 py-5 bg-white text-black text-2xl font-semibold rounded-3xl hover:scale-105 transition inline-block">Start Predicting Now</a>
+            {% else %}
+            <a href="/register" class="px-12 py-5 bg-white text-black text-2xl font-semibold rounded-3xl hover:scale-105 transition inline-block">Create Free Account</a>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-black py-12 border-t border-white/10">
+        <div class="max-w-7xl mx-auto px-6 text-center text-zinc-500">
+            <p>© 2026 FoodAI • Built with ❤️ for healthier choices</p>
+        </div>
+    </footer>
+</body>
+</html>

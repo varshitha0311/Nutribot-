@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result - FoodAI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        .glass { background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(10px); }
+        .nav-link { transition: color 0.3s; }
+        .nav-link:hover { color: #c084fc; }
+        .result-card {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-zinc-950 text-white">
+    <!-- NAVBAR - SAME AS PREDICT PAGE -->
+    <nav class="fixed top-0 w-full z-50 glass border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl flex items-center justify-center text-2xl">🍕</div>
+                <h1 class="text-3xl font-bold tracking-tighter">FoodAI</h1>
+            </div>
+            <div class="flex gap-8 text-lg font-medium">
+                <a href="/" class="nav-link text-white hover:text-purple-400 transition">Home</a>
+                <a href="/about" class="nav-link text-white hover:text-purple-400 transition">About</a>
+                <a href="/algo" class="nav-link text-white hover:text-purple-400 transition">Algorithms</a>
+                <a href="/predict" class="nav-link text-white hover:text-purple-400 transition">Predict</a>
+                <a href="/logout" class="nav-link text-red-400 hover:text-red-300 transition">
+                    <i class="fas fa-sign-out-alt mr-1"></i> Logout ({{ session['user'] }})
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-4xl mx-auto px-6 py-32">
+        <div class="text-center mb-12">
+            <h1 class="text-6xl font-bold">Analysis Result</h1>
+            <p class="text-2xl text-zinc-400 mt-3">Here's what our AI discovered</p>
+        </div>
+
+        <div class="result-card rounded-3xl p-8">
+            <div class="text-center">
+                <div class="text-8xl mb-6">
+                    {% if food_class == 'Apple Pie' %}🍎
+                    {% elif food_class == 'Cannoli' %}🥟
+                    {% elif food_class == 'Cheese Plate' %}🧀
+                    {% elif food_class == 'Cheesecake' %}🍰
+                    {% elif food_class == 'Chicken Wings' %}🍗
+                    {% elif food_class == 'Chocolate Cake' %}🍫
+                    {% elif food_class == 'Deviled Eggs' %}🥚
+                    {% elif food_class == 'Donuts' %}🍩
+                    {% elif food_class == 'French Fries' %}🍟
+                    {% elif food_class == 'Frozen Yogurt' %}🍦
+                    {% elif food_class == 'Ice Cream' %}🍦
+                    {% elif food_class == 'Macarons' %}🍪
+                    {% else %}🍽️
+                    {% endif %}
+                </div>
+                <h2 class="text-5xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                    {{ food_class }}
+                </h2>
+                <div class="mt-4 inline-block px-6 py-2 bg-green-500/20 rounded-full border border-green-500">
+                    <i class="fas fa-chart-line mr-2"></i> Confidence: {{ confidence }}
+                </div>
+            </div>
+
+            <div class="mt-8 p-6 bg-black/30 rounded-2xl">
+                <h3 class="text-2xl font-semibold mb-4">
+                    <i class="fas fa-apple-alt text-green-400 mr-2"></i> Nutritional Information
+                </h3>
+                <p class="text-zinc-300 leading-relaxed">{{ nutrition }}</p>
+            </div>
+
+            <div class="mt-8 flex gap-4">
+                <a href="/predict" class="flex-1 text-center px-6 py-4 bg-purple-600 rounded-2xl hover:bg-purple-700 transition">
+                    <i class="fas fa-camera mr-2"></i> Analyze Another Image
+                </a>
+                <a href="/" class="flex-1 text-center px-6 py-4 bg-zinc-800 rounded-2xl hover:bg-zinc-700 transition">
+                    <i class="fas fa-home mr-2"></i> Back to Home
+                </a>
+            </div>
+        </div>
+
+        <!-- Health Tip -->
+        <div class="mt-8 glass rounded-3xl p-6 text-center">
+            <i class="fas fa-heart text-red-400 text-3xl mb-2"></i>
+            <p class="text-zinc-300">Remember: All foods can be part of a balanced diet! Enjoy in moderation.</p>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-black py-12 border-t border-white/10">
+        <div class="max-w-7xl mx-auto px-6 text-center text-zinc-500">
+            <p>© 2026 FoodAI • Built with ❤️ for healthier choices</p>
+        </div>
+    </footer>
+</body>
+</html>

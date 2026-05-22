@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - FoodAI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+        body { font-family: 'Poppins', sans-serif; }
+        .glass { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(16px); }
+        .nav-link { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .nav-link:hover { transform: translateY(-2px); color: #a855f7; }
+        .input-field { transition: all 0.3s; }
+        .input-field:focus { transform: scale(1.02); }
+    </style>
+</head>
+<body class="bg-zinc-950 text-white min-h-screen flex flex-col">
+    <!-- NAVBAR -->
+    <nav class="fixed top-0 w-full z-50 glass border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl flex items-center justify-center text-2xl">🍕</div>
+                <h1 class="text-3xl font-bold tracking-tighter">FoodAI</h1>
+            </div>
+            <div class="flex gap-8 text-lg font-medium">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/about" class="nav-link">About</a>
+                <a href="/algo" class="nav-link">Algorithms</a>
+                <a href="/login" class="nav-link">Login</a>
+                <a href="/register" class="nav-link text-purple-400">Register</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-grow flex items-center justify-center px-4 py-24">
+        <div class="w-full max-w-md">
+            <!-- Card with background image overlay -->
+            <div class="relative rounded-3xl overflow-hidden shadow-2xl">
+                <!-- Background pattern -->
+                <div class="absolute inset-0 bg-gradient-to-br from-purple-900/30 to-pink-900/30"></div>
+                <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1603133872878-684f208fb84b?q=80&w=2070')] bg-cover bg-center opacity-20"></div>
+                
+                <!-- Glass card content -->
+                <div class="relative glass p-8 rounded-3xl">
+                    <div class="flex justify-center mb-6">
+                        <div class="w-20 h-20 bg-gradient-to-br from-purple-600 to-pink-600 rounded-3xl flex items-center justify-center text-5xl shadow-lg transform hover:rotate-6 transition duration-300">
+                            🍕
+                        </div>
+                    </div>
+                    <h2 class="text-4xl font-bold text-center mb-2">Create Account</h2>
+                    <p class="text-center text-zinc-400 mb-6">Join FoodAI and start your healthy journey</p>
+                    
+                    <form id="registerForm" action="/register" method="POST" class="space-y-4">
+                        <div class="relative">
+                            <i class="fas fa-user absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400"></i>
+                            <input type="text" name="username" placeholder="Username" required
+                                   class="input-field w-full bg-white/10 border border-white/20 rounded-2xl pl-12 pr-4 py-4 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 text-lg transition">
+                        </div>
+                        <div class="relative">
+                            <i class="fas fa-id-card absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400"></i>
+                            <input type="text" name="full_name" placeholder="Full Name" required
+                                   class="input-field w-full bg-white/10 border border-white/20 rounded-2xl pl-12 pr-4 py-4 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 text-lg transition">
+                        </div>
+                        <div class="relative">
+                            <i class="fas fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400"></i>
+                            <input type="email" name="email" placeholder="Email Address" required
+                                   class="input-field w-full bg-white/10 border border-white/20 rounded-2xl pl-12 pr-4 py-4 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 text-lg transition">
+                        </div>
+                        <div class="relative">
+                            <i class="fas fa-phone absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400"></i>
+                            <input type="tel" name="phone" placeholder="Phone Number" required
+                                   class="input-field w-full bg-white/10 border border-white/20 rounded-2xl pl-12 pr-4 py-4 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 text-lg transition">
+                        </div>
+                        <div class="relative">
+                            <i class="fas fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400"></i>
+                            <input type="password" id="password" name="password" placeholder="Password" required
+                                   class="input-field w-full bg-white/10 border border-white/20 rounded-2xl pl-12 pr-4 py-4 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 text-lg transition">
+                        </div>
+                        <div class="relative">
+                            <i class="fas fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400"></i>
+                            <input type="password" id="confirm_password" placeholder="Confirm Password" required
+                                   class="input-field w-full bg-white/10 border border-white/20 rounded-2xl pl-12 pr-4 py-4 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 text-lg transition">
+                        </div>
+
+                        <div class="flex items-start gap-2 text-sm text-zinc-400">
+                            <input type="checkbox" required class="mt-1 rounded bg-white/10 border-white/20">
+                            <span>I agree to the <a href="#" class="text-purple-400 hover:underline">Terms of Service</a> and <a href="#" class="text-purple-400 hover:underline">Privacy Policy</a></span>
+                        </div>
+
+                        <button type="submit" onclick="validatePasswords(event)"
+                                class="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-xl font-semibold rounded-2xl hover:scale-105 transition-transform shadow-lg shadow-purple-600/30">
+                            <i class="fas fa-user-plus mr-2"></i> Create Account
+                        </button>
+                    </form>
+
+                    <div class="relative my-6">
+                        <div class="absolute inset-0 flex items-center">
+                            <div class="w-full border-t border-white/20"></div>
+                        </div>
+                        <div class="relative flex justify-center text-sm">
+                            <span class="px-4 bg-transparent text-zinc-400">Or sign up with</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <button class="flex items-center justify-center gap-2 py-3 bg-white/10 rounded-xl hover:bg-white/20 transition">
+                            <i class="fab fa-google text-red-400"></i> Google
+                        </button>
+                        <button class="flex items-center justify-center gap-2 py-3 bg-white/10 rounded-xl hover:bg-white/20 transition">
+                            <i class="fab fa-github"></i> GitHub
+                        </button>
+                    </div>
+
+                    <p class="text-center mt-8 text-zinc-400">
+                        Already have an account?
+                        <a href="/login" class="text-purple-400 font-semibold hover:underline">Sign in</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-black py-8 border-t border-white/10">
+        <div class="max-w-7xl mx-auto px-6 text-center text-zinc-500">
+            <p>© 2026 FoodAI • Built with ❤️ for healthier choices</p>
+        </div>
+    </footer>
+
+    <script>
+        function validatePasswords(e) {
+            const pass = document.getElementById('password').value;
+            const confirm = document.getElementById('confirm_password').value;
+            if (pass !== confirm) {
+                e.preventDefault();
+                alert("Passwords do not match!");
+            }
+        }
+    </script>
+</body>
+</html>

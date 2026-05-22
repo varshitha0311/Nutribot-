@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algorithms - FoodAI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>/* same */</style>
+</head>
+<body class="bg-zinc-950 text-white">
+    <!-- NAVBAR -->
+    <nav class="fixed top-0 w-full z-50 glass border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl flex items-center justify-center text-2xl">🍕</div>
+                <h1 class="text-3xl font-bold tracking-tighter">FoodAI</h1>
+            </div>
+            <div class="flex gap-8 text-lg font-medium">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/about" class="nav-link">About</a>
+                <a href="/algo" class="nav-link text-purple-400">Algorithms</a>
+                {% if logged_in %}
+                    <a href="/predict" class="nav-link">Predict</a>
+                    <a href="/logout" class="nav-link">Logout ({{ username }})</a>
+                {% else %}
+                    <a href="/login" class="nav-link">Login</a>
+                    <a href="/register" class="nav-link">Register</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-6xl mx-auto px-6 py-32">
+        <h1 class="text-6xl font-bold text-center mb-4">Model Performance</h1>
+        <p class="text-center text-2xl text-zinc-400 mb-16">We trained and compared three powerful architectures on our food dataset.</p>
+        
+        <!-- Model Cards -->
+        <div class="grid grid-cols-3 gap-8">
+            <!-- Custom CNN -->
+            <div class="glass p-8 rounded-3xl card-hover">
+                <h3 class="text-3xl font-bold mb-2">Custom CNN</h3>
+                <div class="text-6xl font-black text-purple-500">66.06%</div>
+                <div class="text-sm text-zinc-400">Test Accuracy • 13.7 MB</div>
+                <div class="h-2 bg-zinc-800 rounded-full mt-8">
+                    <div class="h-2 bg-purple-600 rounded-full w-[66%]"></div>
+                </div>
+                <p class="mt-4 text-zinc-400">A simple 5-layer CNN trained from scratch. Fast inference but lower accuracy.</p>
+                <div class="mt-4 text-sm">
+                    <span class="text-zinc-500">Precision: 65.2% | Recall: 64.8% | F1: 65.0%</span>
+                </div>
+            </div>
+            
+            <!-- SqueezeNet -->
+            <div class="glass p-8 rounded-3xl card-hover">
+                <h3 class="text-3xl font-bold mb-2">SqueezeNet 1.1</h3>
+                <div class="text-6xl font-black text-pink-500">83.50%</div>
+                <div class="text-sm text-zinc-400">Test Accuracy • 2.9 MB</div>
+                <div class="h-2 bg-zinc-800 rounded-full mt-8">
+                    <div class="h-2 bg-pink-600 rounded-full w-[83%]"></div>
+                </div>
+                <p class="mt-4 text-zinc-400">Lightweight architecture with comparable accuracy to VGG16. Great for mobile.</p>
+                <div class="mt-4 text-sm">
+                    <span class="text-zinc-500">Precision: 83.1% | Recall: 82.9% | F1: 83.0%</span>
+                </div>
+            </div>
+            
+            <!-- VGG16 -->
+            <div class="glass p-8 rounded-3xl border-2 border-purple-500 card-hover">
+                <h3 class="text-3xl font-bold mb-2">VGG16 (Best)</h3>
+                <div class="text-6xl font-black text-cyan-400">84.67%</div>
+                <div class="text-sm text-zinc-400">Test Accuracy • 268.6 MB</div>
+                <div class="h-2 bg-zinc-800 rounded-full mt-8">
+                    <div class="h-2 bg-cyan-400 rounded-full w-[85%]"></div>
+                </div>
+                <div class="mt-6 text-xs bg-cyan-900/50 text-cyan-300 px-4 py-2 rounded-2xl inline-block">🏆 RECOMMENDED</div>
+                <p class="mt-4 text-zinc-400">Deep architecture with excellent feature extraction, highest accuracy.</p>
+                <div class="mt-4 text-sm">
+                    <span class="text-zinc-500">Precision: 84.5% | Recall: 84.3% | F1: 84.4%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comparison Table -->
+        <div class="mt-24 glass p-12 rounded-3xl">
+            <h2 class="text-3xl font-bold mb-8">Detailed Comparison</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead class="border-b border-white/20">
+                        <tr>
+                            <th class="py-4">Model</th>
+                            <th class="py-4">Accuracy</th>
+                            <th class="py-4">Precision</th>
+                            <th class="py-4">Recall</th>
+                            <th class="py-4">F1-Score</th>
+                            <th class="py-4">Size</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-b border-white/10">
+                            <td class="py-4">Custom CNN</td>
+                            <td class="py-4">66.06%</td>
+                            <td class="py-4">65.2%</td>
+                            <td class="py-4">64.8%</td>
+                            <td class="py-4">65.0%</td>
+                            <td class="py-4">13.7 MB</td>
+                        </tr>
+                        <tr class="border-b border-white/10">
+                            <td class="py-4">SqueezeNet</td>
+                            <td class="py-4">83.50%</td>
+                            <td class="py-4">83.1%</td>
+                            <td class="py-4">82.9%</td>
+                            <td class="py-4">83.0%</td>
+                            <td class="py-4">2.9 MB</td>
+                        </tr>
+                        <tr>
+                            <td class="py-4 font-semibold">VGG16</td>
+                            <td class="py-4 font-semibold text-cyan-400">84.67%</td>
+                            <td class="py-4">84.5%</td>
+                            <td class="py-4">84.3%</td>
+                            <td class="py-4">84.4%</td>
+                            <td class="py-4">268.6 MB</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Training Curves Placeholder -->
+        <div class="mt-24">
+            <h2 class="text-3xl font-bold text-center mb-8">Training & Validation Accuracy</h2>
+            <div class="flex justify-center">
+                <div class="glass p-8 rounded-3xl w-full max-w-3xl">
+                    <img src="https://via.placeholder.com/800x400?text=Accuracy+Curves+(VGG16+vs+SqueezeNet+vs+CNN)" alt="Accuracy Curves" class="rounded-2xl">
+                </div>
+            </div>
+            <p class="text-center text-zinc-400 mt-6">VGG16 converged fastest and achieved highest validation accuracy with minimal overfitting.</p>
+        </div>
+
+        <!-- Explanation of Architectures -->
+        <div class="mt-24 grid grid-cols-3 gap-8">
+            <div>
+                <h3 class="text-xl font-bold mb-3">Custom CNN</h3>
+                <p class="text-zinc-400">5 convolutional layers with batch norm and max pooling, followed by 2 fully connected layers. Trained from scratch on our dataset.</p>
+            </div>
+            <div>
+                <h3 class="text-xl font-bold mb-3">SqueezeNet</h3>
+                <p class="text-zinc-400">Uses fire modules to reduce parameters while maintaining accuracy. Pretrained on ImageNet, fine-tuned on our 12 classes.</p>
+            </div>
+            <div>
+                <h3 class="text-xl font-bold mb-3">VGG16</h3>
+                <p class="text-zinc-400">16-layer deep network with small 3x3 filters. Pretrained on ImageNet, we replaced the classifier and fine-tuned all layers.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-black py-12 border-t border-white/10">
+        <div class="max-w-7xl mx-auto px-6 text-center text-zinc-500">
+            <p>© 2026 FoodAI • Built with ❤️ for healthier choices</p>
+        </div>
+    </footer>
+</body>
+</html>
